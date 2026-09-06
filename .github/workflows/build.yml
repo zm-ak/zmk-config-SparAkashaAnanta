@@ -31,7 +31,12 @@ permissions:
 
 jobs:
   build:
-    uses: te9no/zmk-workspace/.github/workflows/build-zmk-firmware.yml@main
+    # 一時的に最後に成功したSHAへピン留めしている。@main (da84eb3) で追加された
+    # firmware_provenance の 'Capture firmware inputs' ステップが
+    # `git -C $GITHUB_WORKSPACE rev-parse HEAD` で exit 128 になり、
+    # West build に到達する前に全ジョブが失敗するため。master でも再現する。
+    # te9no/zmk-workspace 側が修正されたら @main に戻すこと。
+    uses: te9no/zmk-workspace/.github/workflows/build-zmk-firmware.yml@148383705c155920be46a48a79d6c6e26127b879
     permissions:
       contents: write
       actions: read
