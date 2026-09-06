@@ -55,7 +55,7 @@
             wait-ms = <10>;
             tap-ms = <10>;
             bindings = <&tog_ls>, <&tog WIN_US>;
-            label = "US_MODE";
+            display-name = "US Mode";
         };
     };
 
