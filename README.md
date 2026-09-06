@@ -82,6 +82,69 @@ Thrives in deep, collaborative environments, particularly abyssal technical conv
 ## Current Keymap Configuration | 現在のキーマップ構成
 ![Keymap](keymap-svg/SAA.svg)
 
+### Mode keys | モード切り替えキー
+
+Two toggles live on the `Fnc` layer:
+
+| Key (`Fnc` layer)         | Binding    | What it does |
+| ------------------------- | ---------- | ------------ |
+| left half, `Esc` position | `&us_mode` | US ⇄ host-layout input |
+| left half, `G` position   | `&tog MAC` | Windows ⇄ Mac modifiers |
+
+**`&us_mode` (US ⇄ JIS)** flips the [zmk-layout-shift](https://github.com/kot149/zmk-layout-shift)
+state. `&kp` is overridden by that module, so while the mode is on every key
+emits the code that a **JIS-configured Windows host** turns into the US legend
+printed on the keycap (`@`, `[`, `]`, `:`, `"`, `(`, `)`, `=`, `+`, `*`, `` ` ``,
+`~`, `{`, `}`, `_`, `|` …). The build selects the JIS mapping with
+`CONFIG_LAYOUT_SHIFT_TARGET_JIS=y`.
+
+**`&tog MAC`** toggles the `Mac` layer, which swaps the two leftmost bottom-row
+modifiers so the key you use for `Ctrl`+C on Windows becomes `Cmd`+C on macOS.
+It only overrides those two positions; everything else falls through.
+
+`Fnc` レイヤーの `Esc` 位置が US/JIS 入力の切り替え、`G` 位置が Windows/Mac の
+修飾キー切り替えです。US モード中は JIS 設定の Windows でもキーキャップの US 刻印
+どおりの記号が入力されます。Mac モードでは最下段左の `Ctrl` と `GUI(Cmd)` が入れ替わります。
+
+### Mode indication on the OLED | OLED でのモード表示
+
+Both modes are implemented so that the **highest active layer** encodes them,
+and the nice_oled layer widget prints that layer's label. With no other layer
+held the left OLED reads:
+
+| OLED     | State |
+| -------- | ----- |
+| `WIN`    | Windows modifiers, layout shift off |
+| `MAC`    | Mac modifiers, layout shift off |
+| `WIN US` | Windows modifiers, layout shift on |
+| `MAC US` | Mac modifiers, layout shift on |
+
+`WIN_US` and `MAC_US` are indicator-only layers (every binding is `&trans`);
+`MAC_US` is activated by a `zmk,conditional-layers` rule when `MAC` and `WIN_US`
+are both on. Because a held layer such as `Fnc` or `Num` sits above them, the
+OLED shows that layer's name instead while it is held — the mode text comes back
+as soon as the layer is released.
+
+他のレイヤーを押していないときは、左側の OLED に上記のモード名が表示されます。
+`Fnc` や `Num` を押している間はそちらのレイヤー名が優先されます。
+
+### Editing the keymap with Keymap Editor | Keymap Editor での編集
+
+`config/info.json` describes the physical layout for
+[Keymap Editor](https://nickcoutsos.github.io/keymap-editor/). It is generated
+from the `zmk,physical-layout` node in `boards/shields/SparAkashaAnanta/SAA.dtsi`,
+with `row`/`col` set to a visual (roughly ortholinear) grid rather than the
+keyboard matrix, as the editor expects. `config/SAA.json` holds the same layout,
+because the editor prefers `config/<keyboard>.json` when it exists.
+
+Note that the editor does not understand every construct used here: layer
+aliases defined with `#define`, the `#include <layout_shift_kp_override.dtsi>`
+line, and behaviors that come from modules (`&us_mode`, `&tog_ls`, `&mkp`,
+`&inc_dec_kp`) are outside what it parses. Review its output before committing.
+
+Keymap Editor は `#define` によるレイヤー別名やモジュール由来の behavior を
+解釈できないため、コミット前に差分を確認してください。
+
 ## Etymology | 語源
 The name "SparAkashaAnanta" encompasses multiple layered meanings, derived from the sacred dissolution and integration of developer knowledge in the deep layers:
 スパラカシャ・アナンタの名は、深層における開発者知識の聖なる「解体と統合」に由来する、重層的な意味を内包している。
