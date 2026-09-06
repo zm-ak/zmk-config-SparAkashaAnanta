@@ -1,10 +1,10 @@
 // #include <layout_shift.dtsi>
 
+#include <layout_shift_kp_override.dtsi>
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/keys.h>
 #include <dt-bindings/zmk/pointing.h>
-#include <layout_shift_kp_override.dtsi>
 
 /*
  * Layer map
@@ -49,12 +49,13 @@
         // US/JIS toggle: flips the zmk-layout-shift state (which is what
         // actually rewrites the key codes) and the WIN_US indicator layer
         // (which is only there so the state is visible on the OLED).
+
         us_mode: us_mode {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
             wait-ms = <10>;
             tap-ms = <10>;
-            bindings = <&tog_ls>, <&tog WIN_US>;
+            bindings = <&tog_ls &tog WIN_US>;
             display-name = "US Mode";
         };
     };
@@ -74,12 +75,12 @@
         default_layer {
             label = "Win";
             bindings = <
-&kp TAB       &kp Q     &kp W      &kp E     &kp R          &kp T               &kp Y           &kp U          &kp I      &kp O      &kp P      &kp BKSP
-&lt BT ESC    &kp A     &kp S      &kp D     &kp F          &kp G               &kp H           &kp J          &kp K      &kp L      &kp SEMI   &lt MOUSE SQT
-&kp LSHFT     &kp Z     &kp X      &kp C     &kp V          &kp B               &kp N           &kp M          &kp COMMA  &kp DOT    &kp UP     &kp FSLH
-&mt LCTL ESC  &kp LGUI  &kp LALT             &lt NUM SPACE  &lt FUNC SPACE      &lt FUNC SPACE  &lt NUM SPACE             &kp LEFT   &kp DOWN   &kp RIGHT
-&kp LEFT      &kp UP    &kp SPACE  &kp DOWN  &kp RIGHT                                          &kp HOME       &kp PG_UP  &kp ENTER  &kp PG_DN  &kp END
-                                   &kp A                                                                       &kp B
+&kp ESCAPE  &kp Q     &kp W      &kp E     &kp R           &kp T           &kp Y          &kp U      &kp I      &kp O                 &kp P          &kp LEFT_BRACKET
+&lt BT TAB  &kp A     &kp D      &kp S     &kp F           &kp G           &kp H          &kp J      &kp K      &kp L                 &kp SEMICOLON  &kp RIGHT_BRACKET
+&kp LSHFT   &kp Z     &kp X      &kp C     &kp V           &kp GRAVE       &kp B          &kp N      &kp M      &kp COMMA             &kp PERIOD     &kp FSLH
+&kp LCTRL   &kp LGUI  &kp LALT             &lt NUM DELETE  &lt FUNC SPACE  &kp BACKSPACE  &kp ENTER             &kp NON_US_BACKSLASH  &lt 4 SQT      &lt 6 LANGUAGE_5
+&kp LEFT    &kp UP    &kp SPACE  &kp DOWN  &kp RIGHT                                      &kp HOME   &kp PG_UP  &kp ENTER             &kp PG_DN      &kp END
+                                 &kp A                                                               &kp B
             >;
 
             sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN &inc_dec_kp PG_UP PG_DN>;
@@ -88,48 +89,48 @@
         mac_layer {
             label = "Mac";
             bindings = <
-&trans        &trans    &trans     &trans    &trans   &trans      &trans  &trans  &trans  &trans  &trans  &trans
-&trans        &trans    &trans     &trans    &trans   &trans      &trans  &trans  &trans  &trans  &trans  &trans
-&trans        &trans    &trans     &trans    &trans   &trans      &trans  &trans  &trans  &trans  &trans  &trans
-&mt LGUI ESC  &kp LCTL  &trans               &trans   &trans      &trans  &trans          &trans  &trans  &trans
-&trans        &trans    &trans     &trans    &trans                       &trans  &trans  &trans  &trans  &trans
-                                   &trans                                         &trans
+&trans        &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans        &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans        &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&mt LGUI ESC  &kp LCTL  &trans          &trans  &trans  &trans  &trans          &trans  &trans  &trans
+&trans        &trans    &trans  &trans  &trans                  &trans  &trans  &trans  &trans  &trans
+                                &trans                                  &trans
             >;
         };
 
         win_us_layer {
             label = "Win US";
             bindings = <
-&trans  &trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans          &trans  &trans      &trans  &trans          &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans                      &trans  &trans  &trans  &trans  &trans
-                        &trans                                      &trans
+&trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans          &trans  &trans  &trans  &trans          &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans                  &trans  &trans  &trans  &trans  &trans
+                        &trans                                  &trans
             >;
         };
 
         mac_us_layer {
             label = "Mac US";
             bindings = <
-&trans  &trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans          &trans  &trans      &trans  &trans          &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans                      &trans  &trans  &trans  &trans  &trans
-                        &trans                                      &trans
+&trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans          &trans  &trans  &trans  &trans          &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans                  &trans  &trans  &trans  &trans  &trans
+                        &trans                                  &trans
             >;
         };
 
         function_layer {
             label = "Fnc";
             bindings = <
-&kp GRAVE  &kp PG_UP  &kp UP     &kp PG_DN  &kp HOME   &trans         &kp F1     &kp F2     &kp F3     &kp F4     &kp F5     &trans
-&us_mode   &kp LEFT   &kp DOWN   &kp RIGHT  &kp END    &tog MAC       &kp F6     &kp F7     &kp F8     &kp F9     &kp F10    &trans
-&trans     &kp BKSP   &kp DEL    &trans     &trans     &trans         &kp F11    &kp F12    &trans     &trans     &trans     &trans
-&trans     &trans     &kp LALT              &kp ENTER  &kp ENTER      &kp ENTER  &kp ENTER             &trans     &trans     &trans
-&kp LEFT   &kp UP     &kp SPACE  &kp DOWN   &kp RIGHT                            &kp HOME   &kp PG_UP  &kp ENTER  &kp PG_DN  &kp END
-                                 &kp A                                                      &kp B
+&kp GRAVE  &kp PG_UP  &kp UP     &kp PG_DN  &kp HOME   &trans     &kp F1     &kp F2     &kp F3     &kp F4     &kp F5     &trans
+&us_mode   &kp LEFT   &kp DOWN   &kp RIGHT  &kp END    &tog MAC   &kp F6     &kp F7     &kp F8     &kp F9     &kp F10    &trans
+&trans     &kp BKSP   &kp DEL    &trans     &trans     &trans     &kp F11    &kp F12    &trans     &trans     &trans     &trans
+&trans     &trans     &kp LALT              &kp ENTER  &kp ENTER  &kp ENTER  &kp ENTER             &trans     &trans     &trans
+&kp LEFT   &kp UP     &kp SPACE  &kp DOWN   &kp RIGHT                        &kp HOME   &kp PG_UP  &kp ENTER  &kp PG_DN  &kp END
+                                 &kp A                                                  &kp B
             >;
 
             sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN &inc_dec_kp PG_UP PG_DN>;
@@ -138,12 +139,12 @@
         num_layer {
             label = "Num";
             bindings = <
-&kp CAPS         &kp N1         &kp N2     &kp N3    &kp N4     &kp N5         &kp N6     &kp N7     &kp N8     &kp N9     &kp N0     &trans
-&trans           &trans         &trans     &trans    &trans     &trans         &kp MINUS  &kp EQUAL  &kp LBKT   &kp RBKT   &kp BSLH   &trans
-&mt LSHFT SPACE  &kp BACKSPACE  &kp DEL    &trans    &trans     &trans         &trans     &kp FSLH   &kp SEMI   &kp SQT    &trans     &trans
-&trans           &kp ENTER      &kp ENTER            &kp ENTER  &kp ENTER      &kp ENTER  &kp ENTER             &trans     &trans     &trans
-&kp LEFT         &kp UP         &kp SPACE  &kp DOWN  &kp RIGHT                            &kp HOME   &kp PG_UP  &kp ENTER  &kp PG_DN  &kp END
-                                           &kp A                                                     &kp B
+&kp CAPS         &kp N1         &kp N2     &kp N3    &kp N4     &kp N5     &kp N6     &kp N7     &kp N8     &kp N9     &kp N0     &trans
+&trans           &trans         &trans     &trans    &trans     &trans     &kp MINUS  &kp EQUAL  &kp LBKT   &kp RBKT   &kp BSLH   &trans
+&mt LSHFT SPACE  &kp BACKSPACE  &kp DEL    &trans    &trans     &trans     &trans     &kp FSLH   &kp SEMI   &kp SQT    &trans     &trans
+&trans           &kp ENTER      &kp ENTER            &kp ENTER  &kp ENTER  &kp ENTER  &kp ENTER             &trans     &trans     &trans
+&kp LEFT         &kp UP         &kp SPACE  &kp DOWN  &kp RIGHT                        &kp HOME   &kp PG_UP  &kp ENTER  &kp PG_DN  &kp END
+                                           &kp A                                                 &kp B
             >;
 
             sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN &inc_dec_kp PG_UP PG_DN>;
@@ -152,12 +153,12 @@
         mouse_layer {
             label = "Mouse";
             bindings = <
-&trans    &trans  &trans     &trans    &trans     &trans      &trans  &trans    &trans     &trans     &trans     &trans
-&trans    &trans  &trans     &trans    &trans     &trans      &trans  &mkp MB1   &mkp MB3   &mkp MB2  &trans     &trans
-&trans    &trans  &trans     &trans    &trans     &trans      &trans  &trans    &trans     &trans     &trans     &trans
-&trans    &trans  &trans               &trans     &trans      &trans  &trans               &trans     &trans     &trans
-&kp LEFT  &kp UP  &kp SPACE  &kp DOWN  &kp RIGHT                      &kp HOME  &kp PG_UP  &kp ENTER  &kp PG_DN  &kp END
-                             &kp A                                              &kp B
+&trans    &trans  &trans     &trans    &trans     &trans  &trans  &trans    &trans     &trans     &trans     &trans
+&trans    &trans  &trans     &trans    &trans     &trans  &trans  &mkp MB1  &mkp MB3   &mkp MB2   &trans     &trans
+&trans    &trans  &trans     &trans    &trans     &trans  &trans  &trans    &trans     &trans     &trans     &trans
+&trans    &trans  &trans               &trans     &trans  &trans  &trans               &trans     &trans     &trans
+&kp LEFT  &kp UP  &kp SPACE  &kp DOWN  &kp RIGHT                  &kp HOME  &kp PG_UP  &kp ENTER  &kp PG_DN  &kp END
+                             &kp A                                          &kp B
             >;
 
             sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN &inc_dec_kp PG_UP PG_DN>;
@@ -166,12 +167,12 @@
         scroll_layer {
             label = "Scr";
             bindings = <
-&trans    &trans  &trans     &trans    &trans     &trans      &trans  &trans    &trans     &trans     &trans     &trans
-&trans    &trans  &trans     &trans    &trans     &trans      &trans  &mkp MB1   &mkp MB3   &mkp MB2  &trans     &trans
-&trans    &trans  &trans     &trans    &trans     &trans      &trans  &trans    &trans     &trans     &trans     &trans
-&trans    &trans  &trans               &trans     &trans      &trans  &trans               &trans     &trans     &trans
-&kp LEFT  &kp UP  &kp SPACE  &kp DOWN  &kp RIGHT                      &kp HOME  &kp PG_UP  &kp ENTER  &kp PG_DN  &kp END
-                             &kp A                                              &kp B
+&trans    &trans  &trans     &trans    &trans     &trans  &trans  &trans    &trans     &trans     &trans     &trans
+&trans    &trans  &trans     &trans    &trans     &trans  &trans  &mkp MB1  &mkp MB3   &mkp MB2   &trans     &trans
+&trans    &trans  &trans     &trans    &trans     &trans  &trans  &trans    &trans     &trans     &trans     &trans
+&trans    &trans  &trans               &trans     &trans  &trans  &trans               &trans     &trans     &trans
+&kp LEFT  &kp UP  &kp SPACE  &kp DOWN  &kp RIGHT                  &kp HOME  &kp PG_UP  &kp ENTER  &kp PG_DN  &kp END
+                             &kp A                                          &kp B
             >;
 
             sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN &inc_dec_kp PG_UP PG_DN>;
@@ -180,12 +181,12 @@
         bt_layer {
             label = "BT";
             bindings = <
-&bt BT_CLR  &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4      &bt BT_CLR_ALL  &trans    &trans     &trans     &trans     &trans
-&trans      &trans        &trans        &trans        &trans        &trans            &trans          &trans    &trans     &trans     &trans     &trans
-&trans      &trans        &trans        &trans        &trans        &trans            &trans          &trans    &trans     &trans     &trans     &trans
-&trans      &trans        &trans                      &trans        &trans            &trans          &trans               &trans     &trans     &trans
-&kp LEFT    &kp UP        &kp SPACE     &kp DOWN      &kp RIGHT                                       &kp HOME  &kp PG_UP  &kp ENTER  &kp PG_DN  &kp END
-                                        &kp A                                                                   &kp B
+&bt BT_CLR  &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4  &bt BT_CLR_ALL  &trans    &trans     &trans     &trans     &trans
+&trans      &trans        &trans        &trans        &trans        &trans        &trans          &trans    &trans     &trans     &trans     &trans
+&trans      &trans        &trans        &trans        &trans        &trans        &trans          &trans    &trans     &trans     &trans     &trans
+&trans      &trans        &trans                      &trans        &trans        &trans          &trans               &trans     &trans     &trans
+&kp LEFT    &kp UP        &kp SPACE     &kp DOWN      &kp RIGHT                                   &kp HOME  &kp PG_UP  &kp ENTER  &kp PG_DN  &kp END
+                                        &kp A                                                               &kp B
             >;
 
             sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN &inc_dec_kp PG_UP PG_DN>;
