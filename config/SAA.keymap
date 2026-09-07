@@ -1,6 +1,7 @@
 // zmk-layout-shift の dtsi は include せず、必要なノードを下の behaviors
 // ブロックで直接定義している。Keymap Editor が #include の順序を並べ替えるため、
 // include に頼るとレイアウトシフトが壊れるのを避けるための措置。詳細は同ブロックのコメント。
+
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/keys.h>
@@ -68,8 +69,8 @@
         //
         // 副作用として &kpls / &mtls / &tog_ls_on / &tog_ls_off は使えない。
         // 必要になったらモジュールの layout_shift.dtsi から同様に転記すること。
-
         // ZMK コア用に素の key press を残しておく。
+
         original_key_press: original_key_press {
             compatible = "zmk,behavior-key-press";
             #binding-cells = <1>;
@@ -77,6 +78,7 @@
         };
 
         // &kp をレイアウトシフト対応版に差し替える。
+
         kp: key_press {
             compatible = "zmk,behavior-layout-shift-key-press";
             #binding-cells = <1>;
@@ -84,6 +86,7 @@
         };
 
         // レイアウトシフト状態のオン/オフを切り替える。
+
         tog_ls: toggle_layout_shift {
             compatible = "zmk,behavior-layout-shift-toggle";
             #binding-cells = <0>;
@@ -127,7 +130,7 @@
 &lt BT TAB  &kp A     &kp S      &kp D     &kp F           &kp G           &kp H          &kp J      &kp K      &kp L                 &kp SEMICOLON  &kp RIGHT_BRACKET
 &kp LSHFT   &kp Z     &kp X      &kp C     &kp V           &kp GRAVE       &kp B          &kp N      &kp M      &kp COMMA             &kp PERIOD     &kp FSLH
 &kp LCTRL   &kp LGUI  &kp LALT             &lt NUM DELETE  &lt FUNC SPACE  &kp BACKSPACE  &kp ENTER             &kp NON_US_BACKSLASH  &lt 4 SQT      &lt 6 LANGUAGE_5
-&kp LEFT    &kp UP    &kp SPACE  &kp DOWN  &kp RIGHT                                      &kp HOME   &kp PG_UP  &kp ENTER             &kp PG_DN      &kp END
+&kp LEFT    &kp UP    &kp SPACE  &kp DOWN  &kp RIGHT                                      &kp HOME   &kp PG_UP  &us_mode              &kp PG_DN      &kp END
                                  &kp A                                                               &kp B
             >;
 
