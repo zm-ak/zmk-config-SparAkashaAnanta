@@ -1,5 +1,49 @@
 #include <input/processors/runtime-input-processor.dtsi>
 
+/*
+ * Auto Mouse Layer (AML)
+ *
+ * ポインティングデバイス (trackball / trackpad) を動かすと MOUSE レイヤーを
+ * 自動的に有効化し、キーを押すと即座に元のレイヤーへ戻す。
+ *
+ * 実装は zmk-module-runtime-input-processor の temp-layer 機能
+ * (zmk,input-processor-runtime) を使っている。zip_temp_layer と違い、
+ * 解除の判定がキー位置の列挙ではなくキーマップの内容で行われる:
+ *
+ *   - MOUSE レイヤーで &trans でないキー (&mkp MB1/MB2/MB3/MB4/MB5 など) は
+ *     押してもレイヤーを維持する
+ *   - temp-layer-keep-keycodes に挙がっている修飾キー (Ctrl/Shift/Alt/GUI) も
+ *     維持する (Ctrl+クリックなどのため)
+ *   - それ以外のキーを押すと即座に MOUSE レイヤーを解除する
+ *
+ * この判定に必要な temp-layer-transparent-behavior / temp-layer-kp-behavior /
+ * temp-layer-keep-keycodes はモジュール側の dtsi で設定済みなので、ここでは
+ * 有効化と対象レイヤー・時間だけを指定する。
+ *
+ * 各値は DYA Studio (runtime input processor の Web UI) から実行時にも変更でき、
+ * 変更するとその値が設定領域に保存される。保存済みの設定は起動時に
+ * ここでの既定値を上書きするので、書き込んでも AML が有効にならない場合は
+ * Studio 側で有効化するか settings_reset ファームを書き込むこと。
+ */
+
+/* config/SAA.keymap の MOUSE レイヤー。定義を変えたらこちらも合わせること。 */
+#define AML_MOUSE_LAYER 6
+
+/* 直前のキー入力からこの時間が経つまではポインタを動かしてもレイヤーを
+ * 有効化しない。タイピング中に手が触れてマウスレイヤーへ落ちるのを防ぐ。 */
+#define AML_ACTIVATION_DELAY_MS 250
+
+/* ポインタの入力が止まってからレイヤーを解除するまでの時間。移動してから
+ * クリックするまでの猶予。キー入力があればこの時間を待たずに解除される。 */
+#define AML_DEACTIVATION_DELAY_MS 800
+
+&mouse_runtime_input_processor {
+    temp-layer-enabled;
+    temp-layer = <AML_MOUSE_LAYER>;
+    temp-layer-activation-delay-ms = <AML_ACTIVATION_DELAY_MS>;
+    temp-layer-deactivation-delay-ms = <AML_DEACTIVATION_DELAY_MS>;
+};
+
 / {
     trackball_listener: trackball_listener {
         compatible = "zmk,input-listener";
@@ -50,8 +94,10 @@
         status = "okay";
         device = <&trackpad_split>;
         
+        /* mouse_runtime_input_processor は等倍・無回転なので座標は変えないが、
+         * これを通すことでトラックパッドでも AML が働く。 */
         input-processors = <&zip_xy_transform (INPUT_TRANSFORM_XY_SWAP)>,
-                           <&scroll_runtime_input_processor>;
+                           <&mouse_runtime_input_processor &scroll_runtime_input_processor>;
 
         scroller {
             layers = <5>;
