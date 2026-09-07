@@ -128,6 +128,41 @@ as soon as the layer is released.
 他のレイヤーを押していないときは、左側の OLED に上記のモード名が表示されます。
 `Fnc` や `Num` を押している間はそちらのレイヤー名が優先されます。
 
+### Auto mouse layer | オートマウスレイヤー
+
+Moving the trackball (or the trackpad) automatically turns the `Mouse` layer on,
+so the mouse buttons sit under the right hand — `MB1`/`MB3`/`MB2` on `J`/`K`/`L`
+and `MB4`/`MB5` on the `Backspace`/`Enter` thumb keys — without holding a layer
+key. Pressing any other key drops the layer immediately, and the layer also
+expires on its own once the pointer has been idle for a moment.
+
+| Setting | Value | Meaning |
+| ------- | ----- | ------- |
+| target layer | `Mouse` (6) | layer activated by pointer movement |
+| activation delay | 250 ms | pointer movement is ignored until the keyboard has been idle this long, so the layer does not appear mid-typing |
+| deactivation delay | 800 ms | how long the layer lingers after the pointer stops, leaving time to click |
+
+Which key presses drop the layer is decided from the keymap rather than from a
+list of key positions: a key that is **not** `&trans` on the `Mouse` layer (the
+`&mkp` buttons) keeps the layer on, modifiers (`Ctrl`/`Shift`/`Alt`/`GUI`) keep
+it on so `Ctrl`+click works, and everything else returns to the previous layer
+at once.
+
+This is the `temp-layer` feature of
+[zmk-module-runtime-input-processor](https://github.com/te9no/zmk-module-runtime-input-processor),
+configured on `mouse_runtime_input_processor` in `snippets/Default/Default.overlay`.
+The same values can be changed at run time from DYA Studio; values saved there
+are restored on boot and take precedence over the defaults above. The stick
+(`JOY`) module is a scroller in this configuration and does not trigger the
+layer.
+
+トラックボール／トラックパッドを動かすと `Mouse` レイヤーが自動で有効になり、
+`J`/`K`/`L` が左・中・右クリック、`Backspace`/`Enter` が戻る・進むになります。
+他のキーを押すと即座に元のレイヤーへ戻り、ポインタを止めてしばらくすると自動で
+解除されます。マウスボタンと修飾キーはレイヤーを維持するため、`Ctrl`+クリックも
+そのまま使えます。値は DYA Studio から実行時にも変更でき、保存された設定が
+上記の既定値より優先されます。
+
 ### Editing the keymap with Keymap Editor | Keymap Editor での編集
 
 `config/info.json` describes the physical layout for
